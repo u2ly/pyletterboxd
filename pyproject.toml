@@ -1,0 +1,21 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "pyletterboxd"
+version = "1.0.0"
+description = "A Python wrapper for the Letterboxd API"
+license = "GPL-3.0-only"
+authors = ["u2ly <76696f6c@proton.me>"]
+readme = "README.md"
+repository = "https://github.com/u2ly/pyfernsehserien"
+keywords = ["letterboxd", "api", "wrapper"]
+include = [
+    { path = "README.md", format = "sdist" },
+    { path = "LICENSE", format = "sdist" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+requests = "^2.31.0"
