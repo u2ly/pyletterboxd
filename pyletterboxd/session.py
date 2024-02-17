@@ -1,11 +1,14 @@
+from typing import Optional, Any, Union
+
+import base64
+import hashlib
+import hmac
 import requests
 import time
-import hmac
-import hashlib
-import uuid
-import base64
 import urllib.parse
-from typing import Optional, Any
+import uuid
+
+from .constants import BASE_URL
 
 
 class Session(requests.Session):
@@ -17,7 +20,7 @@ class Session(requests.Session):
         secret (str): The secret key for signing the requests.
     """
 
-    def __init__(self, api_key: str, secret: str) -> None:
+    def __init__(self, api_key: str, secret: Union[str, bytes]) -> None:
         super().__init__()
 
         if not api_key:
@@ -27,11 +30,12 @@ class Session(requests.Session):
 
         if not secret:
             raise ValueError("Secret must be provided")
-        if not isinstance(secret, str):
-            raise TypeError(f"Expected secret to be a string, not {secret!r}")
-        
+        if not isinstance(secret, (str, bytes)):
+            raise TypeError(f"Expected secret to be a string or bytes, not {secret!r}")
+
         self.api_key = api_key
-        self.secret = base64.b64decode(secret)
+        self.secret = base64.b64decode(secret) if isinstance(secret, str) else secret
+        print(base64.b64encode(self.secret))
 
         self.headers = {
             "Accept-Encoding": "gzip",
@@ -48,6 +52,16 @@ class Session(requests.Session):
         json: Optional[Any] = None,
         **kwargs,
     ) -> requests.Response:
+        if not urllib.parse.urlparse(url).netloc:
+            if url.startswith("/"):
+                url = url[1:]
+
+            url = BASE_URL + url
+        elif not url.startswith(BASE_URL):
+            return super().request(
+                method, url, params=params, data=data, json=json, **kwargs
+            )
+
         params = params or {}
         params.update(
             {

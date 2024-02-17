@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "pyletterboxd"
 version = "1.0.0"
-description = "A Python wrapper for the Letterboxd API"
+description = "Python wrapper for the Letterboxd API"
 license = "GPL-3.0-only"
 authors = ["u2ly <76696f6c@proton.me>"]
 readme = "README.md"
