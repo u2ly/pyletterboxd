@@ -35,7 +35,6 @@ class Session(requests.Session):
 
         self.api_key = api_key
         self.secret = base64.b64decode(secret) if isinstance(secret, str) else secret
-        print(base64.b64encode(self.secret))
 
         self.headers = {
             "Accept-Encoding": "gzip",
